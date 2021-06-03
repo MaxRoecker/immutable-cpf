@@ -16,6 +16,19 @@ const cpfs = {
   valid: new CPF(digits.valid),
 };
 
+describe('constructor tests', () => {
+  it('should only use the integer part as digits', () => {
+    const cpfA = new CPF([3.5, 1.0, 6.15, 7, 5.9, 7, 4, 5.5, 5, 1, 2.1]);
+    const cpfB = new CPF([3.2, 1.1, 6.5, 7.14, 5, 7, 4, 5, 5.5, 1.0, 2.05]);
+    expect(cpfA.equals(cpfB));
+  });
+  it('should only use the unit part as digits', () => {
+    const cpfA = new CPF([13.5, 11.0, 26, 77, 105, 7, 4, 5.5, 55, 1, 2.1]);
+    const cpfB = new CPF([3.2, 1.1, 6.5, 7, 5, 7, 4, 45, 5.5, 11.0, 2.05]);
+    expect(cpfA.equals(cpfB));
+  });
+});
+
 describe('"CPF.prototype.equals" tests', () => {
   it('should return true when comparing itself', () => {
     expect(cpfs.empty.equals(cpfs.empty)).equal(true);

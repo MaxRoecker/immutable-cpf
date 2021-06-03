@@ -15,7 +15,7 @@ export class CPF implements Evaluable {
    */
   constructor(digits: Iterable<number>) {
     const numbers = Array.from(digits).slice(0, 11);
-    this.digits = numbers.map((n) => Math.round(n) % 10);
+    this.digits = numbers.map((n) => Math.trunc(n) % 10);
     this.hash = hashIterable(this.digits);
   }
 
