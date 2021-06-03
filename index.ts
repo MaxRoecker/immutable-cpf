@@ -62,7 +62,7 @@ export class CPF implements Evaluable {
 
   /**
    * Check if the CPF is valid. A CPF is valid if they have 11 digits and
-   * the two last digits satisfies the [validation algorithm][CPF]
+   * the two last digits satisfies the [validation algorithm][CPF].
    *
    * [CPF]: https://pt.wikipedia.org/wiki/Cadastro_de_pessoas_f%C3%ADsicas#D%C3%ADgitos_verificadores
    *
