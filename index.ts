@@ -1,10 +1,18 @@
 import type { Evaluable } from 'evaluable';
 import { hashIterable } from 'cruxhash';
 
+/**
+ * An immutable class to represent CPF documents.
+ */
 export class CPF implements Evaluable {
   private readonly digits: number[];
   private readonly hash: number;
 
+  /**
+   * Creates a new immutable instance of CPF.
+   *
+   * @param digits The digits of the CPF
+   */
   constructor(digits: Iterable<number>) {
     const numbers = Array.from(digits).slice(0, 11);
     this.digits = numbers.map((n) => Math.round(n) % 10);
@@ -26,12 +34,18 @@ export class CPF implements Evaluable {
     return this.hash;
   }
 
+  /**
+   * @returns a string representation of an object.
+   */
   toString(): string {
     return `[CPF: ${this.format()}]`;
   }
 
   /**
-   * Serializes the CPF into JSON.
+   * Serializes the CPF into JSON. Returns a string with all the digits of the
+   * CPF.
+   *
+   * @returns an string with the digits.
    */
   toJSON(): string {
     return this.digits.join('');
@@ -39,13 +53,20 @@ export class CPF implements Evaluable {
 
   /**
    * Returns the CPF digits in an array.
+   *
+   * @returns a new array witht the digits.
    */
   toArray(): number[] {
     return Array.from(this.digits);
   }
 
   /**
-   * Check if the CPF is valid.
+   * Check if the CPF is valid. A CPF is valid if they have 11 digits and
+   * the two last digits satisfies the [validation algorithm][CPF]
+   *
+   * [CPF]: https://pt.wikipedia.org/wiki/Cadastro_de_pessoas_f%C3%ADsicas#D%C3%ADgitos_verificadores
+   *
+   * @returns `true` if the CPF is valid, `false` otherwise.
    */
   checkValidity(): boolean {
     if (this.digits.length !== 11) return false;
@@ -56,7 +77,9 @@ export class CPF implements Evaluable {
   }
 
   /**
-   * Returns a formatted version of the CPF digits.
+   * Formats the CPF in the standard pattern "###.###.###-##".
+   *
+   * @returns a formatted string.
    */
   format(): string {
     let output = this.digits.slice(0, 3).join('');
@@ -75,7 +98,11 @@ export class CPF implements Evaluable {
   static readonly Nil = new CPF([]);
 
   /**
-   * Creates a CPF instance from an string.
+   * Creates a CPF instance from an string. The string can be formatted or not.
+   * If not enough digits are found on the string, an incomplete CPF will be
+   * returned.
+   *
+   * @returns a CPF instance.
    */
   static from(formatted: string): CPF {
     const stripped = formatted.replace(/\D/g, '').normalize('NFD');
@@ -84,7 +111,9 @@ export class CPF implements Evaluable {
   }
 
   /**
-   * Creates a valid CPF instance of random numbers.
+   * Creates new valid CPF instance of random numbers.
+   *
+   * @returns a CPF instance.
    */
   static create(): CPF {
     const digits = Array.from({ length: 9 }, () => {
@@ -97,6 +126,8 @@ export class CPF implements Evaluable {
 
   /**
    * Returns the CPF check digit from the given digits.
+   *
+   * @returns the check digit.
    */
   private static digit(digits: number[]): number {
     let acc = 0;
