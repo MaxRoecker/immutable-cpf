@@ -74,7 +74,7 @@ const user = { name: 'José Silva', cpf };
 JSON.stringify(user) // '{"name": "José Silva", "cpf": "31675745501"}'
 ```
 
-See the complete API on the [Wiki's page](Wiki).
+See the complete API on the [Wiki's page][Wiki].
 
 ## Contributing
 
