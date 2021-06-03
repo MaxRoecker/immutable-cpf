@@ -1,10 +1,14 @@
 # Immutable CPF
 
-A tiny library to handle CPF (Cadastro de Pessoa Física), a brazilian
-identification document, in an immutable flavour.
+A tiny library to handle CPF in an immutable flavour.
 
-[![View on NPM](https://img.shields.io/npm/v/immutable-cpf?style=flat-square)](https://www.npmjs.com/package/immutable-cpf)
-[![License](https://img.shields.io/npm/l/immutable-cpf?style=flat-square)](https://maxroecker.mit-license.org/)
+> The **[CPF][CPF]** (Cadastro de Pessoas Físicas, [sepeˈɛfi]; portuguese for
+> "Natural Persons Register") is the Brazilian individual taxpayer registry
+> identification. This number is attributed by the Brazilian Federal Revenue to
+> Brazilians and resident aliens who, directly or indirectly, pay taxes in
+> Brazil.
+
+## [![View on NPM](https://img.shields.io/npm/v/immutable-cpf?style=flat-square)](https://www.npmjs.com/package/immutable-cpf) [![License](https://img.shields.io/npm/l/immutable-cpf?style=flat-square)](https://maxroecker.mit-license.org/) 🇧🇷
 
 ## Installation
 
@@ -16,9 +20,9 @@ npm i immutable-cpf
 
 ## Usage
 
-The library provides a the [`CPF`][CPF] class to create immutable instances
-representing CPFs documents. You can create instances with any iterable of
-digits. See the example:
+The library provides a the [`CPF`][CPFClass] class to create immutable instances
+representing CPF documents. You can create instances with any iterable of digits
+and format or validate them. See the example:
 
 ```js
 import { CPF } from 'immutable-cpf';
@@ -47,8 +51,8 @@ cpfA.equals(cpfB); // true
 cpfA.equals(cpfC); // true
 ```
 
-> The `CPF` class implements the [`Evaluable`][Evaluable] interface, so it is
-> suitable to be used along with the [ImmutableJS][ImmutableJS] data structures.
+> The `CPF` class implements the [`Evaluable`][Evaluable] interface and it's
+> suitable to be used along [ImmutableJS][ImmutableJS] data structures.
 
 The library also provides the method [`CPF.create`][CPF.create] to generate
 valid instances with pseudo-random numbers.
@@ -67,12 +71,17 @@ it directly calling the [`CPF.prototype.toJSON`][CPF.toJSON].
 ```js
 import { CPF } from 'immutable-cpf';
 
-const cpf = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1]);
-
-const user = { name: 'José Silva', cpf };
+const user = {
+  name: 'José Silva',
+  cpf: new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1]),
+};
 
 JSON.stringify(user) // '{"name": "José Silva", "cpf": "31675745501"}'
+
+user.cpf.toJSON() // '31675745501'
 ```
+
+## API
 
 See the complete API on the [Wiki's page][Wiki].
 
@@ -89,7 +98,8 @@ Please make sure to update tests as appropriate.
 
 [Evaluable]: https://github.com/MaxRoecker/evaluable
 [Wiki]: https://github.com/MaxRoecker/immutable-cpf/wiki
-[CPF]: https://github.com/MaxRoecker/immutable-cpf/wiki#class-cpf
+[CPF]: https://en.wikipedia.org/wiki/CPF_number
+[CPFClass]: https://github.com/MaxRoecker/immutable-cpf/wiki#class-cpf
 [CPF.from]: https://github.com/MaxRoecker/immutable-cpf/wiki#from
 [CPF.create]: https://github.com/MaxRoecker/immutable-cpf/wiki#create
 [CPF.toJSON]: https://github.com/MaxRoecker/immutable-cpf/wiki#tojson
