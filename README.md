@@ -67,6 +67,6 @@ Please make sure to update tests as appropriate.
 
 [Evaluable]: https://github.com/MaxRoecker/evaluable
 [Wiki]: https://github.com/MaxRoecker/immutable-cpf/wiki
-[CPF]: https://github.com/MaxRoecker/immutable-cpf/wiki
-[CPF.from]: https://github.com/MaxRoecker/immutable-cpf/wiki
+[CPF]: https://github.com/MaxRoecker/immutable-cpf/wiki#class-cpf
+[CPF.from]: https://github.com/MaxRoecker/immutable-cpf/wiki#from
 [ImmutableJS]: https://immutable-js.github.io/immutable-js/
