@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-
+import { is } from 'evaluable';
 import { CPF } from './index';
 
 const digits = {
@@ -65,6 +65,37 @@ describe('"CPF.prototype.equals" tests', () => {
     expect(cpfs.valid.equals(cpfs.empty)).equal(false);
     expect(cpfs.valid.equals(cpfs.semi)).equal(false);
     expect(cpfs.valid.equals(cpfs.invalid)).equal(false);
+  });
+
+  it('should be called when used in "is" function', () => {
+    expect(is(cpfs.empty, cpfs.empty)).equal(true);
+    expect(is(cpfs.semi, cpfs.semi)).equal(true);
+    expect(is(cpfs.invalid, cpfs.invalid)).equal(true);
+    expect(is(cpfs.valid, cpfs.valid)).equal(true);
+
+    expect(is(cpfs.empty, CPF.Nil)).equal(true);
+    expect(is(CPF.Nil, cpfs.empty)).equal(true);
+
+    expect(is(cpfs.empty, new CPF(digits.empty))).equal(true);
+    expect(is(cpfs.semi, new CPF(digits.semi))).equal(true);
+    expect(is(cpfs.invalid, new CPF(digits.invalid))).equal(true);
+    expect(is(cpfs.valid, new CPF(digits.valid))).equal(true);
+
+    expect(is(cpfs.empty, cpfs.semi)).equal(false);
+    expect(is(cpfs.empty, cpfs.invalid)).equal(false);
+    expect(is(cpfs.empty, cpfs.valid)).equal(false);
+
+    expect(is(cpfs.semi, cpfs.empty)).equal(false);
+    expect(is(cpfs.semi, cpfs.invalid)).equal(false);
+    expect(is(cpfs.semi, cpfs.valid)).equal(false);
+
+    expect(is(cpfs.invalid, cpfs.empty)).equal(false);
+    expect(is(cpfs.invalid, cpfs.semi)).equal(false);
+    expect(is(cpfs.invalid, cpfs.valid)).equal(false);
+
+    expect(is(cpfs.valid, cpfs.empty)).equal(false);
+    expect(is(cpfs.valid, cpfs.semi)).equal(false);
+    expect(is(cpfs.valid, cpfs.invalid)).equal(false);
   });
 });
 
