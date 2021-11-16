@@ -176,6 +176,19 @@ describe('"CPF.prototype.size" tests', () => {
   });
 });
 
+describe('"CPF.prototype[Symbol.iterator]" tests', () => {
+  it('should return an interator with the digits in the CPF.', () => {
+    const tests: (keyof typeof cpfs)[] = ['empty', 'invalid', 'semi', 'valid'];
+    for (const test of tests) {
+      let index = 0;
+      for (const digit of cpfs[test]) {
+        expect(digit).equal(digits[test][index]);
+        index += 1;
+      }
+    }
+  });
+});
+
 describe('"CPF.Nil" tests', () => {
   it('should be equals to a nil instance.', () => {
     expect(CPF.Nil.equals(CPF.Nil)).equal(true);
