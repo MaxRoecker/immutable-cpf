@@ -167,6 +167,15 @@ describe('"CPF.prototype.format" tests', () => {
   });
 });
 
+describe('"CPF.prototype.size" tests', () => {
+  it('should return the number of digits in the CPF.', () => {
+    expect(cpfs.empty.size).equal(0);
+    expect(cpfs.semi.size).equal(4);
+    expect(cpfs.invalid.size).equal(11);
+    expect(cpfs.valid.size).equal(11);
+  });
+});
+
 describe('"CPF.Nil" tests', () => {
   it('should be equals to a nil instance.', () => {
     expect(CPF.Nil.equals(CPF.Nil)).equal(true);

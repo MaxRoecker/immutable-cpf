@@ -93,6 +93,13 @@ export class CPF implements Evaluable {
   }
 
   /**
+   * The number of digits in the CPF.
+   */
+  get size(): number {
+    return this.digits.length;
+  }
+
+  /**
    * An empty instance of CPF.
    */
   static readonly Nil = new CPF([]);
