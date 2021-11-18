@@ -125,6 +125,9 @@ export class CPF implements Evaluable {
     return this.digits.length;
   }
 
+  /**
+   * Iterates over the digits of the CPF.
+   */
   *[Symbol.iterator](): Generator<number, void, void> {
     for (const digit of this.digits) {
       yield digit;
