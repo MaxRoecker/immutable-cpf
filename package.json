@@ -1,6 +1,6 @@
 {
   "name": "immutable-cpf",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Max Naegeler Roecker",
   "license": "MIT",
   "description": "A tiny library to handle CPF (Cadastro de Pessoa Física), a brazilian identification document, in an immutable flavour.",
