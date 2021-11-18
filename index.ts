@@ -61,6 +61,35 @@ export class CPF implements Evaluable {
   }
 
   /**
+   * Returns an object that represents the state of validity of the CPF, with
+   * the following properties:
+   * - `valueMissing`: true if the count of CPF digits is zero;
+   * - `tooShort`: true if the count of CPF digits between, inclusively, one
+   *   and ten;
+   * - `typeMismatch`: true if the number of digits is eleven but the checkdigit
+   *   algorithm fails.
+   *
+   * @returns the validity state of the CPF.
+   */
+  getValidity(): {
+    valueMissing: boolean;
+    tooShort: boolean;
+    typeMismatch: boolean;
+  } {
+    const valueMissing = this.digits.length === 0;
+
+    const tooShort = this.digits.length > 0 && this.digits.length < 11;
+
+    const typeMismatch =
+      this.digits.length === 11 &&
+      (this.digits.every((digit) => digit === this.digits[0]) ||
+        CPF.digit(this.digits.slice(0, 9)) !== this.digits[9] ||
+        CPF.digit(this.digits.slice(0, 10)) !== this.digits[10]);
+
+    return { valueMissing, tooShort, typeMismatch };
+  }
+
+  /**
    * Check if the CPF is valid. A CPF is valid if they have 11 digits and
    * the two last digits satisfies the [validation algorithm][CPF].
    *
@@ -69,11 +98,8 @@ export class CPF implements Evaluable {
    * @returns `true` if the CPF is valid, `false` otherwise.
    */
   checkValidity(): boolean {
-    if (this.digits.length !== 11) return false;
-    if (this.digits.every((digit) => digit === this.digits[0])) return false;
-    if (CPF.digit(this.digits.slice(0, 9)) !== this.digits[9]) return false;
-    if (CPF.digit(this.digits.slice(0, 10)) !== this.digits[10]) return false;
-    return true;
+    const { valueMissing, tooShort, typeMismatch } = this.getValidity();
+    return !(valueMissing || tooShort || typeMismatch);
   }
 
   /**

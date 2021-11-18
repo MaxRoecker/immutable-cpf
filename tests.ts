@@ -141,6 +141,34 @@ describe('"CPF.prototype.toArray" tests', () => {
   });
 });
 
+describe('"CPF.prototype.getValidity" tests', () => {
+  const validities = {
+    empty: cpfs.empty.getValidity(),
+    semi: cpfs.semi.getValidity(),
+    invalid: cpfs.invalid.getValidity(),
+    valid: cpfs.valid.getValidity(),
+  };
+
+  it('should return true valueMissing for empty CPFs.', () => {
+    expect(validities.empty.valueMissing).equal(true);
+    expect(validities.semi.valueMissing).equal(false);
+    expect(validities.invalid.valueMissing).equal(false);
+    expect(validities.valid.valueMissing).equal(false);
+  });
+  it('should return true tooShort for CPFs with digits between zero and eleven.', () => {
+    expect(validities.empty.tooShort).equal(false);
+    expect(validities.semi.tooShort).equal(true);
+    expect(validities.invalid.tooShort).equal(false);
+    expect(validities.valid.tooShort).equal(false);
+  });
+  it('should return true typeMismatch for CPFs with eleven digits but invalid check digits.', () => {
+    expect(validities.empty.typeMismatch).equal(false);
+    expect(validities.semi.typeMismatch).equal(false);
+    expect(validities.invalid.typeMismatch).equal(true);
+    expect(validities.valid.typeMismatch).equal(false);
+  });
+});
+
 describe('"CPF.prototype.checkValidity" tests', () => {
   it('should return false for CPFs with invalid digits.', () => {
     expect(cpfs.empty.checkValidity()).equal(false);
