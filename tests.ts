@@ -222,9 +222,6 @@ describe('"CPF.Nil" tests', () => {
     expect(CPF.Nil.equals(CPF.Nil)).equal(true);
     expect(CPF.Nil.equals(cpfs.empty)).equal(true);
   });
-  it('should have hash code equals to zero.', () => {
-    expect(CPF.Nil.hashCode()).equal(0);
-  });
   it('should have an empty string representation.', () => {
     expect(CPF.Nil.toString()).equal('[CPF: ]');
   });

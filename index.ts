@@ -1,5 +1,5 @@
 import type { Evaluable } from 'evaluable';
-import { hashIterable } from 'cruxhash';
+import { hashIterable, getSeed } from 'cruxhash';
 
 /**
  * An immutable class to represent CPF documents.
@@ -16,7 +16,7 @@ export class CPF implements Evaluable {
   constructor(digits: Iterable<number>) {
     const numbers = Array.from(digits).slice(0, 11);
     this.digits = numbers.map((n) => Math.trunc(n) % 10);
-    this.hash = hashIterable(this.digits);
+    this.hash = hashIterable(this.digits, CPF.seed);
   }
 
   equals(other: unknown): boolean {
@@ -133,6 +133,11 @@ export class CPF implements Evaluable {
       yield digit;
     }
   }
+
+  /**
+   * A seed for the hashing algorithm
+   */
+  static seed: number = getSeed('CPF');
 
   /**
    * An empty instance of CPF.
