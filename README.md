@@ -2,7 +2,7 @@
 
 A tiny library to handle CPF in an immutable flavour.
 
-> The **[CPF][CPF]** (Cadastro de Pessoas Físicas, [sepeˈɛfi]; portuguese for
+> The **[CPF][cpf]** (Cadastro de Pessoas Físicas, [sepeˈɛfi]; portuguese for
 > "Natural Persons Register") is the Brazilian individual taxpayer registry
 > identification. This number is attributed by the Brazilian Federal Revenue to
 > Brazilians and resident aliens who, directly or indirectly, pay taxes in
@@ -20,7 +20,7 @@ npm i immutable-cpf
 
 ## Usage
 
-The library provides a the [`CPF`][CPFClass] class to create immutable instances
+The library provides a the [`CPF`][cpfclass] class to create immutable instances
 representing CPF documents. You can create instances with any iterable of digits
 and format or validate them. See the example:
 
@@ -29,14 +29,14 @@ import { CPF } from 'immutable-cpf';
 
 const cpf = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1]);
 
-cpf.equals(cpf) // true
+cpf.equals(cpf); // true
 
-cpf.checkValidity() // true
+cpf.checkValidity(); // true
 
-cpf.format() // '316.757.455-01'
+cpf.format(); // '316.757.455-01'
 ```
 
-You can also create instances from strings using the [`CPF.from`][CPF.from]
+You can also create instances from strings using the [`CPF.from`][cpf.from]
 method.
 
 ```js
@@ -51,10 +51,30 @@ cpfA.equals(cpfB); // true
 cpfA.equals(cpfC); // true
 ```
 
-> The `CPF` class implements the [`Evaluable`][Evaluable] interface and it's
-> suitable to be used along [ImmutableJS][ImmutableJS] data structures.
+> The `CPF` class implements the [`Evaluable`][evaluable] interface and it's
+> suitable to be used along [ImmutableJS][immutablejs] data structures.
 
-The library also provides the method [`CPF.create`][CPF.create] to generate
+The method [`CPF.prototype.getValidity`][cpf.getvalidity] returns the validity
+state of the instance. If you only want to check if the instance is valid or
+not, see the [`CPF.prototype.checkValidity`][cpf.checkvalidity] method.
+
+```js
+import { CPF } from 'immutable-cpf';
+
+const empty = new CPF([]);
+empty.checkValidity(); // false, it's empty
+
+const semi = new CPF([3, 1, 6, 7]);
+semi.checkValidity(); // false, it's not complete
+
+const invalid = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 1, 2]);
+semi.checkValidity(); // false, its check digits fails
+
+const valid = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1]);
+valid.checkValidity(); // true
+```
+
+The library also provides the method [`CPF.create`][cpf.create] to generate
 valid instances with pseudo-random numbers.
 
 ```js
@@ -62,28 +82,28 @@ import { CPF } from 'immutable-cpf';
 
 const cpf = CPF.create();
 
-cpf.checkValidity() // true
+cpf.checkValidity(); // true
 ```
 
 The default JSON serialization a `CPF` instance is a string. You can also access
-it directly calling the [`CPF.prototype.toJSON`][CPF.toJSON].
+it directly calling the [`CPF.prototype.toJSON`][cpf.tojson].
 
 ```js
 import { CPF } from 'immutable-cpf';
 
-const user = {
+const user = {s
   name: 'José Silva',
   cpf: new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1]),
 };
 
-JSON.stringify(user) // '{"name": "José Silva", "cpf": "31675745501"}'
+JSON.stringify(user); // '{"name": "José Silva", "cpf": "31675745501"}'
 
-user.cpf.toJSON() // '31675745501'
+user.cpf.toJSON(); // '31675745501'
 ```
 
 ## API
 
-See the complete API on the [Wiki's page][Wiki].
+See the complete API on the [Wiki's page][wiki].
 
 ## Contributing
 
@@ -96,11 +116,13 @@ Please make sure to update tests as appropriate.
 
 [MIT](https://maxroecker.mit-license.org/)
 
-[Evaluable]: https://github.com/MaxRoecker/evaluable
-[Wiki]: https://github.com/MaxRoecker/immutable-cpf/wiki
-[CPF]: https://en.wikipedia.org/wiki/CPF_number
-[CPFClass]: https://github.com/MaxRoecker/immutable-cpf/wiki#class-cpf
-[CPF.from]: https://github.com/MaxRoecker/immutable-cpf/wiki#from
-[CPF.create]: https://github.com/MaxRoecker/immutable-cpf/wiki#create
-[CPF.toJSON]: https://github.com/MaxRoecker/immutable-cpf/wiki#tojson
-[ImmutableJS]: https://immutable-js.github.io/immutable-js/
+[evaluable]: https://github.com/MaxRoecker/evaluable
+[wiki]: https://github.com/MaxRoecker/immutable-cpf/wiki
+[cpf]: https://en.wikipedia.org/wiki/CPF_number
+[cpfclass]: https://github.com/MaxRoecker/immutable-cpf/wiki#class-cpf
+[cpf.from]: https://github.com/MaxRoecker/immutable-cpf/wiki#from
+[cpf.getvalidity]: https://github.com/MaxRoecker/immutable-cpf/wiki#getvalidity
+[cpf.checkvalidity]: https://github.com/MaxRoecker/immutable-cpf/wiki#checkvalidity
+[cpf.create]: https://github.com/MaxRoecker/immutable-cpf/wiki#create
+[cpf.tojson]: https://github.com/MaxRoecker/immutable-cpf/wiki#tojson
+[immutablejs]: https://immutable-js.github.io/immutable-js/
