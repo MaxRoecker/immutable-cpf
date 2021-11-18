@@ -83,8 +83,8 @@ export class CPF implements Evaluable {
     const typeMismatch =
       this.digits.length === 11 &&
       (this.digits.every((digit) => digit === this.digits[0]) ||
-        CPF.digit(this.digits.slice(0, 9)) !== this.digits[9] ||
-        CPF.digit(this.digits.slice(0, 10)) !== this.digits[10]);
+        CPF.getCheckDigit(this.digits, 0, 9) !== this.digits[9] ||
+        CPF.getCheckDigit(this.digits, 0, 10) !== this.digits[10]);
 
     return { valueMissing, tooShort, typeMismatch };
   }
@@ -158,24 +158,27 @@ export class CPF implements Evaluable {
    * @returns a CPF instance.
    */
   static create(): CPF {
-    const digits = Array.from({ length: 9 }, () => {
-      return Math.round(Math.random() * 9);
-    });
-    digits.push(CPF.digit(digits));
-    digits.push(CPF.digit(digits));
+    const length = 9;
+    const digits = Array.from({ length }, () => Math.round(Math.random() * 9));
+    digits.push(CPF.getCheckDigit(digits));
+    digits.push(CPF.getCheckDigit(digits));
     return new CPF(digits);
   }
 
   /**
-   * Returns the CPF check digit from the given digits.
+   * Returns the CPF check digit from interval of the given digits.
    *
    * @returns the check digit.
    */
-  private static digit(digits: number[]): number {
+  static getCheckDigit(
+    digits: Readonly<Array<number>>,
+    start = 0,
+    end = digits.length
+  ): number {
     let acc = 0;
-    let i = 0;
-    while (i < digits.length) {
-      acc = acc + digits[i] * (digits.length + 1 - i);
+    let i = start;
+    while (i < end) {
+      acc = acc + digits[i] * (end + 1 - i);
       i = i + 1;
     }
     const rem = acc % 11;
