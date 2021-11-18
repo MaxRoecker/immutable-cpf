@@ -5,7 +5,7 @@ import { hashIterable } from 'cruxhash';
  * An immutable class to represent CPF documents.
  */
 export class CPF implements Evaluable {
-  private readonly digits: number[];
+  private readonly digits: Array<number>;
   private readonly hash: number;
 
   /**
@@ -56,7 +56,7 @@ export class CPF implements Evaluable {
    *
    * @returns a new array witht the digits.
    */
-  toArray(): number[] {
+  toArray(): Array<number> {
     return Array.from(this.digits);
   }
 
