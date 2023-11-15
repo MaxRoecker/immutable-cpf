@@ -1,5 +1,5 @@
 import { type Evaluable } from 'evaluable';
-import { getSeed, hash } from 'cruxhash';
+import { getSeed, hashSequence } from 'cruxhash';
 
 /**
  * An immutable class to represent CPF documents.
@@ -32,7 +32,7 @@ export class CPF implements Evaluable {
 
   hashCode(): number {
     if (this.#hashCode == null) {
-      this.#hashCode = hash(this.#digits, CPF.#seed);
+      this.#hashCode = hashSequence(this.#digits, CPF.#seed);
     }
     return this.#hashCode;
   }
