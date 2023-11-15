@@ -195,6 +195,15 @@ describe('"CPF.prototype.format" tests', () => {
   });
 });
 
+describe('"CPF.prototype.length" tests', () => {
+  it('should return the number of digits in the CPF.', () => {
+    expect(cpfs.empty.length).toBe(0);
+    expect(cpfs.semi.length).toBe(4);
+    expect(cpfs.invalid.length).toBe(11);
+    expect(cpfs.valid.length).toBe(11);
+  });
+});
+
 describe('"CPF.prototype.size" tests', () => {
   it('should return the number of digits in the CPF.', () => {
     expect(cpfs.empty.size).toBe(0);

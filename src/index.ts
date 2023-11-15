@@ -1,22 +1,22 @@
-import type { Evaluable } from 'evaluable';
-import { hashIterable, getSeed } from 'cruxhash';
+import { type Evaluable } from 'evaluable';
+import { getSeed, hash } from 'cruxhash';
 
 /**
  * An immutable class to represent CPF documents.
  */
 export class CPF implements Evaluable {
-  private readonly digits: Array<number>;
-  private readonly hash: number;
+  #digits: Array<number> = [];
+  #hashCode: number | null = null;
 
   /**
    * Creates a new immutable instance of CPF.
    *
    * @param digits The digits of the CPF
    */
-  constructor(digits: Iterable<number>) {
+  constructor(digits: Iterable<number> = []) {
     const numbers = Array.from(digits).slice(0, 11);
-    this.digits = numbers.map((n) => Math.trunc(n) % 10);
-    this.hash = hashIterable(this.digits, CPF.seed);
+    if (numbers.length === 0) return CPF.Nil;
+    this.#digits = numbers.map((n) => Math.trunc(n) % 10);
   }
 
   equals(other: unknown): boolean {
@@ -24,14 +24,17 @@ export class CPF implements Evaluable {
       this === other ||
       (other != null &&
         other instanceof CPF &&
-        this.hash === other.hash &&
-        this.digits.length === other.digits.length &&
-        this.digits.every((digit, index) => other.digits[index] === digit))
+        this.hashCode() === other.hashCode() &&
+        this.#digits.length === other.#digits.length &&
+        this.#digits.every((digit, index) => other.#digits[index] === digit))
     );
   }
 
   hashCode(): number {
-    return this.hash;
+    if (this.#hashCode == null) {
+      this.#hashCode = hash(this.#digits, CPF.#seed);
+    }
+    return this.#hashCode;
   }
 
   /**
@@ -48,7 +51,7 @@ export class CPF implements Evaluable {
    * @returns an string with the digits.
    */
   toJSON(): string {
-    return this.digits.join('');
+    return this.#digits.join('');
   }
 
   /**
@@ -57,7 +60,7 @@ export class CPF implements Evaluable {
    * @returns a new array witht the digits.
    */
   toArray(): Array<number> {
-    return Array.from(this.digits);
+    return Array.from(this.#digits);
   }
 
   /**
@@ -73,18 +76,18 @@ export class CPF implements Evaluable {
    */
   getValidity(): {
     valueMissing: boolean;
-    tooShort: boolean;
     typeMismatch: boolean;
+    tooShort: boolean;
   } {
-    const valueMissing = this.digits.length === 0;
+    const valueMissing = this.#digits.length === 0;
 
-    const tooShort = this.digits.length > 0 && this.digits.length < 11;
+    const tooShort = this.#digits.length > 0 && this.#digits.length < 11;
 
     const typeMismatch =
-      this.digits.length === 11 &&
-      (this.digits.every((digit) => digit === this.digits[0]) ||
-        CPF.getCheckDigit(this.digits, 0, 9) !== this.digits[9] ||
-        CPF.getCheckDigit(this.digits, 0, 10) !== this.digits[10]);
+      this.#digits.length === 11 &&
+      (this.#digits.every((digit) => digit === this.#digits[0]) ||
+        CPF.getCheckDigit(this.#digits, 0, 9) !== this.#digits[9] ||
+        CPF.getCheckDigit(this.#digits, 0, 10) !== this.#digits[10]);
 
     return { valueMissing, tooShort, typeMismatch };
   }
@@ -108,28 +111,36 @@ export class CPF implements Evaluable {
    * @returns a formatted string.
    */
   format(): string {
-    let output = this.digits.slice(0, 3).join('');
-    if (this.digits.length < 3) return output;
-    output = output + '.' + this.digits.slice(3, 6).join('');
-    if (this.digits.length < 6) return output;
-    output = output + '.' + this.digits.slice(6, 9).join('');
-    if (this.digits.length < 9) return output;
-    output = output + '-' + this.digits.slice(9, 11).join('');
+    let output = this.#digits.slice(0, 3).join('');
+    if (this.#digits.length < 3) return output;
+    output = output + '.' + this.#digits.slice(3, 6).join('');
+    if (this.#digits.length < 6) return output;
+    output = output + '.' + this.#digits.slice(6, 9).join('');
+    if (this.#digits.length < 9) return output;
+    output = output + '-' + this.#digits.slice(9, 11).join('');
     return output;
   }
 
   /**
    * The number of digits in the CPF.
    */
+  get length(): number {
+    return this.#digits.length;
+  }
+
+  /**
+   * The number of digits in the CPF.
+   * @deprecated Use `length` property instead
+   */
   get size(): number {
-    return this.digits.length;
+    return this.#digits.length;
   }
 
   /**
    * Iterates over the digits of the CPF.
    */
   *[Symbol.iterator](): Generator<number, void, void> {
-    for (const digit of this.digits) {
+    for (const digit of this.#digits) {
       yield digit;
     }
   }
@@ -137,7 +148,7 @@ export class CPF implements Evaluable {
   /**
    * A seed for the hashing algorithm
    */
-  static seed: number = getSeed('CPF');
+  static #seed: number = getSeed('CPF');
 
   /**
    * An empty instance of CPF.
@@ -178,7 +189,7 @@ export class CPF implements Evaluable {
   static getCheckDigit(
     digits: Readonly<Array<number>>,
     start = 0,
-    end = digits.length
+    end = digits.length,
   ): number {
     let acc = 0;
     let i = start;
