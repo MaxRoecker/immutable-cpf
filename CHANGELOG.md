@@ -1,5 +1,11 @@
 # immutable-cpf
 
+## 1.3.1
+
+### Patch Changes
+
+- 7fd36a1: Update dependencies
+
 ## 1.3.0
 
 ### Minor Changes
