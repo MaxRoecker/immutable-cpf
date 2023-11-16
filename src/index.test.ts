@@ -108,6 +108,27 @@ describe('"CPF.prototype.hashCode" tests', () => {
   });
 });
 
+describe('"CPF.prototype.at" tests', () => {
+  it('should return the digit in the given index.', () => {
+    expect(cpfs.semi.at(0)).toBe(3);
+    expect(cpfs.semi.at(-1)).toBe(7);
+    expect(cpfs.invalid.at(1)).toBe(1);
+    expect(cpfs.invalid.at(-2)).toBe(1);
+    expect(cpfs.valid.at(3)).toBe(7);
+    expect(cpfs.valid.at(-3)).toBe(5);
+  });
+  it('should return undefined in the given index.', () => {
+    expect(cpfs.empty.at(0)).toBe(undefined);
+    expect(cpfs.empty.at(-1)).toBe(undefined);
+    expect(cpfs.semi.at(5)).toBe(undefined);
+    expect(cpfs.semi.at(-5)).toBe(undefined);
+    expect(cpfs.invalid.at(11)).toBe(undefined);
+    expect(cpfs.invalid.at(-12)).toBe(undefined);
+    expect(cpfs.valid.at(11)).toBe(undefined);
+    expect(cpfs.valid.at(-12)).toBe(undefined);
+  });
+});
+
 describe('"CPF.prototype.toString" tests', () => {
   it('should return an string representation.', () => {
     expect(cpfs.empty.toString()).toBe('[CPF: ]');

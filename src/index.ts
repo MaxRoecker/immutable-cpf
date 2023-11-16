@@ -36,6 +36,14 @@ export class CPF implements Evaluable {
   }
 
   /**
+   * Returns the digit located at the specified index. Negative integers count
+   * back from the last digit in the current CPF.
+   */
+  at(index: number): number | undefined {
+    return this.#digits.at(index);
+  }
+
+  /**
    * Returns`true` if the given value is equal to this CPF, `false` otherwise.
    * Two CPFs are equal if they have the same sequence of digits.
    */
