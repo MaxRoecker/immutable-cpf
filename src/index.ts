@@ -11,7 +11,7 @@ export class CPF implements Evaluable {
   /**
    * Creates a new immutable instance of CPF.
    *
-   * @param digits The digits of the CPF
+   * @param digits
    */
   constructor(digits: Iterable<number> = []) {
     const numbers = Array.from(digits).slice(0, 11);
@@ -19,6 +19,26 @@ export class CPF implements Evaluable {
     this.#digits = numbers.map((n) => Math.trunc(n) % 10);
   }
 
+  /**
+   * The number of digits in the CPF.
+   */
+  get length(): number {
+    return this.#digits.length;
+  }
+
+  /**
+   * The number of digits in the CPF.
+   * @deprecated Use `length` property instead
+   * @see {length}
+   */
+  get size(): number {
+    return this.#digits.length;
+  }
+
+  /**
+   * Returns`true` if the given value is equal to this CPF, `false` otherwise.
+   * Two CPFs are equal if they have the same sequence of digits.
+   */
   equals(other: unknown): boolean {
     return (
       this === other ||
@@ -38,47 +58,11 @@ export class CPF implements Evaluable {
   }
 
   /**
-   * @returns a string representation of an object.
-   */
-  toString(): string {
-    return `[CPF: ${this.format()}]`;
-  }
-
-  /**
-   * Serializes the CPF into JSON. Returns a string with all the digits of the
-   * CPF.
+   * Returns an object that represents the state of validity of the CPF.
    *
-   * @returns an string with the digits.
+   * @see {CPFValidityStateFlags}
    */
-  toJSON(): string {
-    return this.#digits.join('');
-  }
-
-  /**
-   * Returns the CPF digits in an array.
-   *
-   * @returns a new array witht the digits.
-   */
-  toArray(): Array<number> {
-    return Array.from(this.#digits);
-  }
-
-  /**
-   * Returns an object that represents the state of validity of the CPF, with
-   * the following properties:
-   * - `valueMissing`: true if the count of CPF digits is zero;
-   * - `tooShort`: true if the count of CPF digits between, inclusively, one
-   *   and ten;
-   * - `typeMismatch`: true if the number of digits is eleven but the checkdigit
-   *   algorithm fails.
-   *
-   * @returns the validity state of the CPF.
-   */
-  getValidity(): {
-    valueMissing: boolean;
-    typeMismatch: boolean;
-    tooShort: boolean;
-  } {
+  getValidity(): CPFValidityStateFlags {
     const valueMissing = this.#digits.length === 0;
 
     const tooShort = this.#digits.length > 0 && this.#digits.length < 11;
@@ -93,12 +77,11 @@ export class CPF implements Evaluable {
   }
 
   /**
-   * Check if the CPF is valid. A CPF is valid if they have 11 digits and
-   * the two last digits satisfies the [validation algorithm][CPF].
+   * Returns `true` if the CPF is valid, `false` otherwise. A CPF is valid if
+   * they have 11 digits and the two last digits satisfies the
+   * [validation algorithm][CPF].
    *
    * [CPF]: https://pt.wikipedia.org/wiki/Cadastro_de_pessoas_f%C3%ADsicas#D%C3%ADgitos_verificadores
-   *
-   * @returns `true` if the CPF is valid, `false` otherwise.
    */
   checkValidity(): boolean {
     const { valueMissing, tooShort, typeMismatch } = this.getValidity();
@@ -107,8 +90,6 @@ export class CPF implements Evaluable {
 
   /**
    * Formats the CPF in the standard pattern "###.###.###-##".
-   *
-   * @returns a formatted string.
    */
   format(): string {
     let output = this.#digits.slice(0, 3).join('');
@@ -122,18 +103,24 @@ export class CPF implements Evaluable {
   }
 
   /**
-   * The number of digits in the CPF.
+   * Returns a string representation of an object.
    */
-  get length(): number {
-    return this.#digits.length;
+  toString(): string {
+    return `[CPF: ${this.format()}]`;
   }
 
   /**
-   * The number of digits in the CPF.
-   * @deprecated Use `length` property instead
+   * Serializes the digits of the CPF into JSON string.
    */
-  get size(): number {
-    return this.#digits.length;
+  toJSON(): string {
+    return this.#digits.join('');
+  }
+
+  /**
+   * Returns the CPF digits in an array.
+   */
+  toArray(): Array<number> {
+    return Array.from(this.#digits);
   }
 
   /**
@@ -145,9 +132,6 @@ export class CPF implements Evaluable {
     }
   }
 
-  /**
-   * A seed for the hashing algorithm
-   */
   static #seed: number = getSeed('CPF');
 
   /**
@@ -159,19 +143,16 @@ export class CPF implements Evaluable {
    * Creates a CPF instance from an string. The string can be formatted or not.
    * If not enough digits are found on the string, an incomplete CPF will be
    * returned.
-   *
-   * @returns a CPF instance.
    */
   static from(formatted: string): CPF {
     const stripped = formatted.replace(/\D/g, '').normalize('NFD');
+    if (stripped.length === 0) return CPF.Nil;
     const digits = Array.from(stripped).map((d) => Number.parseInt(d, 10));
     return new CPF(digits);
   }
 
   /**
    * Creates new valid CPF instance of random numbers.
-   *
-   * @returns a CPF instance.
    */
   static create(): CPF {
     const length = 9;
@@ -183,8 +164,6 @@ export class CPF implements Evaluable {
 
   /**
    * Returns the CPF check digit from interval of the given digits.
-   *
-   * @returns the check digit.
    */
   static getCheckDigit(
     digits: Readonly<Array<number>>,
@@ -201,3 +180,27 @@ export class CPF implements Evaluable {
     return rem < 2 ? 0 : 11 - rem;
   }
 }
+
+/**
+ * Represents the state of validity of the CPF.
+ */
+export type CPFValidityStateFlags = {
+  /**
+   * Flagged as `true` if the count of CPF digits is zero.
+   */
+  valueMissing: boolean;
+
+  /**
+   * Flagged as `true` if the count of CPF digits between, inclusively, one and
+   * ten.
+   */
+  tooShort: boolean;
+
+  /**
+   * Flagged as `true` if the number of digits is eleven but the
+   * [check digit algorithm][CPF] fails.
+   *
+   * [CPF]: https://pt.wikipedia.org/wiki/Cadastro_de_pessoas_f%C3%ADsicas#D%C3%ADgitos_verificadores
+   */
+  typeMismatch: boolean;
+};
