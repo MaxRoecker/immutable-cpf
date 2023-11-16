@@ -142,6 +142,23 @@ describe('"CPF.prototype.at" tests', () => {
   });
 });
 
+describe('"CPF.prototype.with" tests', () => {
+  it('should return a new CPF with the value in the given index.', () => {
+    const cpfA = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 0]);
+    expect(cpfA.with(10, 1).equals(cpfs.valid)).toBe(true);
+    expect(cpfA.with(-1, 1).equals(cpfs.valid)).toBe(true);
+  });
+  it('should return the same CPF if no change is made.', () => {
+    expect(cpfs.valid.with(10, 1)).toBe(cpfs.valid);
+    expect(cpfs.valid.with(-1, 1.5)).toBe(cpfs.valid);
+  });
+  it('should throw an `RangeError` on out-of-bounds index.', () => {
+    expect(() => cpfs.empty.with(0, 1)).toThrow(RangeError);
+    expect(() => cpfs.valid.with(11, 0)).toThrow(RangeError);
+    expect(() => cpfs.valid.with(-12, 1)).toThrow(RangeError);
+  });
+});
+
 describe('"CPF.prototype.toString" tests', () => {
   it('should return an string representation.', () => {
     expect(cpfs.empty.toString()).toBe('[CPF: ]');
