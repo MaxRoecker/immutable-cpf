@@ -10,13 +10,15 @@ export class CPF implements Evaluable {
 
   /**
    * Creates a new immutable instance of CPF.
-   *
-   * @param digits
    */
-  constructor(digits: Iterable<number> = []) {
-    const numbers = Array.from(digits).slice(0, 11);
-    if (numbers.length === 0) return CPF.Nil;
-    this.#digits = numbers.map((n) => Math.trunc(n) % 10);
+  constructor(numbers: Iterable<number> = []) {
+    for (const value of numbers) {
+      const digit = Math.trunc(value) % 10;
+      if (Number.isNaN(digit) || digit < 0 || digit > 9) continue;
+      this.#digits.push(digit);
+      if (this.#digits.length === 11) break;
+    }
+    if (this.#digits.length === 0) return CPF.Nil;
   }
 
   /**
@@ -153,9 +155,10 @@ export class CPF implements Evaluable {
    * returned.
    */
   static from(formatted: string): CPF {
-    const stripped = formatted.replace(/\D/g, '').normalize('NFD');
+    const stripped = formatted.normalize('NFD').replace(/\D/g, '');
     if (stripped.length === 0) return CPF.Nil;
-    const digits = Array.from(stripped).map((d) => Number.parseInt(d, 10));
+    const chars = stripped.substring(0, 11);
+    const digits = Array.from(chars, (c) => Number.parseInt(c, 10) % 10);
     return new CPF(digits);
   }
 
@@ -164,7 +167,7 @@ export class CPF implements Evaluable {
    */
   static create(): CPF {
     const length = 9;
-    const digits = Array.from({ length }, () => Math.round(Math.random() * 9));
+    const digits = Array.from({ length }, () => Math.trunc(Math.random() * 10));
     digits.push(CPF.getCheckDigit(digits));
     digits.push(CPF.getCheckDigit(digits));
     return new CPF(digits);
@@ -179,10 +182,8 @@ export class CPF implements Evaluable {
     end = digits.length,
   ): number {
     let acc = 0;
-    let i = start;
-    while (i < end) {
-      acc = acc + digits[i] * (end + 1 - i);
-      i = i + 1;
+    for (let index = start; index < end; index = index + 1) {
+      acc = acc + digits[index] * (end + 1 - index);
     }
     const rem = acc % 11;
     return rem < 2 ? 0 : 11 - rem;

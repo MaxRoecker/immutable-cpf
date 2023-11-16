@@ -20,12 +20,25 @@ describe('constructor tests', () => {
   it('should only use the integer part as digits', () => {
     const cpfA = new CPF([3.5, 1.0, 6.15, 7, 5.9, 7, 4, 5.5, 5, 1, 2.1]);
     const cpfB = new CPF([3.2, 1.1, 6.5, 7.14, 5, 7, 4, 5, 5.5, 1.0, 2.05]);
-    expect(cpfA.equals(cpfB));
+    expect(cpfA.equals(cpfB)).toBe(true);
   });
   it('should only use the unit part as digits', () => {
-    const cpfA = new CPF([13.5, 11.0, 26, 77, 105, 7, 4, 5.5, 55, 1, 2.1]);
-    const cpfB = new CPF([3.2, 1.1, 6.5, 7, 5, 7, 4, 45, 5.5, 11.0, 2.05]);
-    expect(cpfA.equals(cpfB));
+    const a = [13.5, 11.0, 26, 77, 105, NaN, 7, 4, 5.5, 55, Infinity, 1, 2.1];
+    const b = [3.2, 1.1, 6.5, 7, 5, Infinity, 7, 4, 45, 5.5, NaN, 11.0, 2.05];
+    const cpfA = new CPF(a);
+    const cpfB = new CPF(b);
+    expect(cpfA.equals(cpfB)).toBe(true);
+  });
+  it('should only use the first eleven digits', () => {
+    const cpfA = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1, 0, 1, 2]);
+    const cpfB = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1]);
+    expect(cpfA.equals(cpfB)).toBe(true);
+  });
+  it('returns nil instance for all empty CPFs', () => {
+    const cpfA = new CPF([]);
+    const cpfB = new CPF();
+    expect(cpfA).toBe(CPF.Nil);
+    expect(cpfB).toBe(CPF.Nil);
   });
 });
 
@@ -248,9 +261,8 @@ describe('"CPF.prototype[Symbol.iterator]" tests', () => {
 });
 
 describe('"CPF.Nil" tests', () => {
-  it('should be equals to a nil instance.', () => {
-    expect(CPF.Nil.equals(CPF.Nil)).toBe(true);
-    expect(CPF.Nil.equals(cpfs.empty)).toBe(true);
+  it('should have no digits.', () => {
+    expect(CPF.Nil.length).toBe(0);
   });
   it('should have an empty string representation.', () => {
     expect(CPF.Nil.toString()).toBe('[CPF: ]');
