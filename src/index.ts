@@ -195,8 +195,11 @@ export class CPF implements Evaluable {
     start = 0,
     end = digits.length,
   ): number {
+    if (start < 0) throw new RangeError('Invalid "start" argument.');
+    if (end > digits.length) throw new RangeError('Invalid "end" argument.');
     let acc = 0;
     for (let index = start; index < end; index = index + 1) {
+      // @ts-expect-error index is already checked.
       acc = acc + digits[index] * (end + 1 - index);
     }
     const rem = acc % 11;

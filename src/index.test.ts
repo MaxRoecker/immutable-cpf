@@ -20,19 +20,19 @@ describe('constructor tests', () => {
   it('should only use the integer part as digits', () => {
     const cpfA = new CPF([3.5, 1.0, 6.15, 7, 5.9, 7, 4, 5.5, 5, 1, 2.1]);
     const cpfB = new CPF([3.2, 1.1, 6.5, 7.14, 5, 7, 4, 5, 5.5, 1.0, 2.05]);
-    expect(cpfA.equals(cpfB)).toBe(true);
+    expect(cpfA.equals(cpfB)).toBeTrue();
   });
   it('should only use the unit part as digits', () => {
     const a = [13.5, 11.0, 26, 77, 105, NaN, 7, 4, 5.5, 55, Infinity, 1, 2.1];
     const b = [3.2, 1.1, 6.5, 7, 5, Infinity, 7, 4, 45, 5.5, NaN, 11.0, 2.05];
     const cpfA = new CPF(a);
     const cpfB = new CPF(b);
-    expect(cpfA.equals(cpfB)).toBe(true);
+    expect(cpfA.equals(cpfB)).toBeTrue();
   });
   it('should only use the first eleven digits', () => {
     const cpfA = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1, 0, 1, 2]);
     const cpfB = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 1]);
-    expect(cpfA.equals(cpfB)).toBe(true);
+    expect(cpfA.equals(cpfB)).toBeTrue();
   });
   it('returns nil instance for all empty CPFs', () => {
     const cpfA = new CPF([]);
@@ -44,71 +44,71 @@ describe('constructor tests', () => {
 
 describe('"CPF.prototype.equals" tests', () => {
   it('should return true when comparing itself', () => {
-    expect(cpfs.empty.equals(cpfs.empty)).toBe(true);
-    expect(cpfs.semi.equals(cpfs.semi)).toBe(true);
-    expect(cpfs.invalid.equals(cpfs.invalid)).toBe(true);
-    expect(cpfs.valid.equals(cpfs.valid)).toBe(true);
+    expect(cpfs.empty.equals(cpfs.empty)).toBeTrue();
+    expect(cpfs.semi.equals(cpfs.semi)).toBeTrue();
+    expect(cpfs.invalid.equals(cpfs.invalid)).toBeTrue();
+    expect(cpfs.valid.equals(cpfs.valid)).toBeTrue();
   });
 
   it('should return empty digits equal to CPF.Nil', () => {
-    expect(cpfs.empty.equals(CPF.Nil)).toBe(true);
-    expect(CPF.Nil.equals(cpfs.empty)).toBe(true);
+    expect(cpfs.empty.equals(CPF.Nil)).toBeTrue();
+    expect(CPF.Nil.equals(cpfs.empty)).toBeTrue();
   });
 
   it('should return true when having the same digits', () => {
-    expect(cpfs.empty.equals(new CPF(digits.empty))).toBe(true);
-    expect(cpfs.semi.equals(new CPF(digits.semi))).toBe(true);
-    expect(cpfs.invalid.equals(new CPF(digits.invalid))).toBe(true);
-    expect(cpfs.valid.equals(new CPF(digits.valid))).toBe(true);
+    expect(cpfs.empty.equals(new CPF(digits.empty))).toBeTrue();
+    expect(cpfs.semi.equals(new CPF(digits.semi))).toBeTrue();
+    expect(cpfs.invalid.equals(new CPF(digits.invalid))).toBeTrue();
+    expect(cpfs.valid.equals(new CPF(digits.valid))).toBeTrue();
   });
 
   it('should return false when not having the same digits', () => {
-    expect(cpfs.empty.equals(cpfs.semi)).toBe(false);
-    expect(cpfs.empty.equals(cpfs.invalid)).toBe(false);
-    expect(cpfs.empty.equals(cpfs.valid)).toBe(false);
+    expect(cpfs.empty.equals(cpfs.semi)).toBeFalse();
+    expect(cpfs.empty.equals(cpfs.invalid)).toBeFalse();
+    expect(cpfs.empty.equals(cpfs.valid)).toBeFalse();
 
-    expect(cpfs.semi.equals(cpfs.empty)).toBe(false);
-    expect(cpfs.semi.equals(cpfs.invalid)).toBe(false);
-    expect(cpfs.semi.equals(cpfs.valid)).toBe(false);
+    expect(cpfs.semi.equals(cpfs.empty)).toBeFalse();
+    expect(cpfs.semi.equals(cpfs.invalid)).toBeFalse();
+    expect(cpfs.semi.equals(cpfs.valid)).toBeFalse();
 
-    expect(cpfs.invalid.equals(cpfs.empty)).toBe(false);
-    expect(cpfs.invalid.equals(cpfs.semi)).toBe(false);
-    expect(cpfs.invalid.equals(cpfs.valid)).toBe(false);
+    expect(cpfs.invalid.equals(cpfs.empty)).toBeFalse();
+    expect(cpfs.invalid.equals(cpfs.semi)).toBeFalse();
+    expect(cpfs.invalid.equals(cpfs.valid)).toBeFalse();
 
-    expect(cpfs.valid.equals(cpfs.empty)).toBe(false);
-    expect(cpfs.valid.equals(cpfs.semi)).toBe(false);
-    expect(cpfs.valid.equals(cpfs.invalid)).toBe(false);
+    expect(cpfs.valid.equals(cpfs.empty)).toBeFalse();
+    expect(cpfs.valid.equals(cpfs.semi)).toBeFalse();
+    expect(cpfs.valid.equals(cpfs.invalid)).toBeFalse();
   });
 
   it('should be called when used in "is" function', () => {
-    expect(is(cpfs.empty, cpfs.empty)).toBe(true);
-    expect(is(cpfs.semi, cpfs.semi)).toBe(true);
-    expect(is(cpfs.invalid, cpfs.invalid)).toBe(true);
-    expect(is(cpfs.valid, cpfs.valid)).toBe(true);
+    expect(is(cpfs.empty, cpfs.empty)).toBeTrue();
+    expect(is(cpfs.semi, cpfs.semi)).toBeTrue();
+    expect(is(cpfs.invalid, cpfs.invalid)).toBeTrue();
+    expect(is(cpfs.valid, cpfs.valid)).toBeTrue();
 
-    expect(is(cpfs.empty, CPF.Nil)).toBe(true);
-    expect(is(CPF.Nil, cpfs.empty)).toBe(true);
+    expect(is(cpfs.empty, CPF.Nil)).toBeTrue();
+    expect(is(CPF.Nil, cpfs.empty)).toBeTrue();
 
-    expect(is(cpfs.empty, new CPF(digits.empty))).toBe(true);
-    expect(is(cpfs.semi, new CPF(digits.semi))).toBe(true);
-    expect(is(cpfs.invalid, new CPF(digits.invalid))).toBe(true);
-    expect(is(cpfs.valid, new CPF(digits.valid))).toBe(true);
+    expect(is(cpfs.empty, new CPF(digits.empty))).toBeTrue();
+    expect(is(cpfs.semi, new CPF(digits.semi))).toBeTrue();
+    expect(is(cpfs.invalid, new CPF(digits.invalid))).toBeTrue();
+    expect(is(cpfs.valid, new CPF(digits.valid))).toBeTrue();
 
-    expect(is(cpfs.empty, cpfs.semi)).toBe(false);
-    expect(is(cpfs.empty, cpfs.invalid)).toBe(false);
-    expect(is(cpfs.empty, cpfs.valid)).toBe(false);
+    expect(is(cpfs.empty, cpfs.semi)).toBeFalse();
+    expect(is(cpfs.empty, cpfs.invalid)).toBeFalse();
+    expect(is(cpfs.empty, cpfs.valid)).toBeFalse();
 
-    expect(is(cpfs.semi, cpfs.empty)).toBe(false);
-    expect(is(cpfs.semi, cpfs.invalid)).toBe(false);
-    expect(is(cpfs.semi, cpfs.valid)).toBe(false);
+    expect(is(cpfs.semi, cpfs.empty)).toBeFalse();
+    expect(is(cpfs.semi, cpfs.invalid)).toBeFalse();
+    expect(is(cpfs.semi, cpfs.valid)).toBeFalse();
 
-    expect(is(cpfs.invalid, cpfs.empty)).toBe(false);
-    expect(is(cpfs.invalid, cpfs.semi)).toBe(false);
-    expect(is(cpfs.invalid, cpfs.valid)).toBe(false);
+    expect(is(cpfs.invalid, cpfs.empty)).toBeFalse();
+    expect(is(cpfs.invalid, cpfs.semi)).toBeFalse();
+    expect(is(cpfs.invalid, cpfs.valid)).toBeFalse();
 
-    expect(is(cpfs.valid, cpfs.empty)).toBe(false);
-    expect(is(cpfs.valid, cpfs.semi)).toBe(false);
-    expect(is(cpfs.valid, cpfs.invalid)).toBe(false);
+    expect(is(cpfs.valid, cpfs.empty)).toBeFalse();
+    expect(is(cpfs.valid, cpfs.semi)).toBeFalse();
+    expect(is(cpfs.valid, cpfs.invalid)).toBeFalse();
   });
 });
 
@@ -131,22 +131,22 @@ describe('"CPF.prototype.at" tests', () => {
     expect(cpfs.valid.at(-3)).toBe(5);
   });
   it('should return undefined in the given index.', () => {
-    expect(cpfs.empty.at(0)).toBe(undefined);
-    expect(cpfs.empty.at(-1)).toBe(undefined);
-    expect(cpfs.semi.at(5)).toBe(undefined);
-    expect(cpfs.semi.at(-5)).toBe(undefined);
-    expect(cpfs.invalid.at(11)).toBe(undefined);
-    expect(cpfs.invalid.at(-12)).toBe(undefined);
-    expect(cpfs.valid.at(11)).toBe(undefined);
-    expect(cpfs.valid.at(-12)).toBe(undefined);
+    expect(cpfs.empty.at(0)).toBeUndefined();
+    expect(cpfs.empty.at(-1)).toBeUndefined();
+    expect(cpfs.semi.at(5)).toBeUndefined();
+    expect(cpfs.semi.at(-5)).toBeUndefined();
+    expect(cpfs.invalid.at(11)).toBeUndefined();
+    expect(cpfs.invalid.at(-12)).toBeUndefined();
+    expect(cpfs.valid.at(11)).toBeUndefined();
+    expect(cpfs.valid.at(-12)).toBeUndefined();
   });
 });
 
 describe('"CPF.prototype.with" tests', () => {
   it('should return a new CPF with the value in the given index.', () => {
     const cpfA = new CPF([3, 1, 6, 7, 5, 7, 4, 5, 5, 0, 0]);
-    expect(cpfA.with(10, 1).equals(cpfs.valid)).toBe(true);
-    expect(cpfA.with(-1, 1).equals(cpfs.valid)).toBe(true);
+    expect(cpfA.with(10, 1).equals(cpfs.valid)).toBeTrue();
+    expect(cpfA.with(-1, 1).equals(cpfs.valid)).toBeTrue();
   });
   it('should return the same CPF if no change is made.', () => {
     expect(cpfs.valid.with(10, 1)).toBe(cpfs.valid);
@@ -201,39 +201,39 @@ describe('"CPF.prototype.getValidity" tests', () => {
   };
 
   it('should return true valueMissing for empty CPFs.', () => {
-    expect(validities.empty.valueMissing).toBe(true);
-    expect(validities.semi.valueMissing).toBe(false);
-    expect(validities.invalid.valueMissing).toBe(false);
-    expect(validities.valid.valueMissing).toBe(false);
+    expect(validities.empty.valueMissing).toBeTrue();
+    expect(validities.semi.valueMissing).toBeFalse();
+    expect(validities.invalid.valueMissing).toBeFalse();
+    expect(validities.valid.valueMissing).toBeFalse();
   });
   it('should return true tooShort for CPFs with digits between zero and eleven.', () => {
-    expect(validities.empty.tooShort).toBe(false);
-    expect(validities.semi.tooShort).toBe(true);
-    expect(validities.invalid.tooShort).toBe(false);
-    expect(validities.valid.tooShort).toBe(false);
+    expect(validities.empty.tooShort).toBeFalse();
+    expect(validities.semi.tooShort).toBeTrue();
+    expect(validities.invalid.tooShort).toBeFalse();
+    expect(validities.valid.tooShort).toBeFalse();
   });
   it('should return true typeMismatch for CPFs with eleven digits but invalid check digits.', () => {
-    expect(validities.empty.typeMismatch).toBe(false);
-    expect(validities.semi.typeMismatch).toBe(false);
-    expect(validities.invalid.typeMismatch).toBe(true);
-    expect(validities.valid.typeMismatch).toBe(false);
+    expect(validities.empty.typeMismatch).toBeFalse();
+    expect(validities.semi.typeMismatch).toBeFalse();
+    expect(validities.invalid.typeMismatch).toBeTrue();
+    expect(validities.valid.typeMismatch).toBeFalse();
   });
 });
 
 describe('"CPF.prototype.checkValidity" tests', () => {
   it('should return false for CPFs with invalid digits.', () => {
-    expect(cpfs.empty.checkValidity()).toBe(false);
-    expect(cpfs.semi.checkValidity()).toBe(false);
-    expect(cpfs.invalid.checkValidity()).toBe(false);
+    expect(cpfs.empty.checkValidity()).toBeFalse();
+    expect(cpfs.semi.checkValidity()).toBeFalse();
+    expect(cpfs.invalid.checkValidity()).toBeFalse();
   });
   it('should return false for CPFs with same digits.', () => {
     for (let index = 0; index < 10; index++) {
       const digits = new Array(11).fill(index);
-      expect(new CPF(digits).checkValidity()).toBe(false);
+      expect(new CPF(digits).checkValidity()).toBeFalse();
     }
   });
   it('should return true for CPFs with valid digits.', () => {
-    expect(cpfs.valid.checkValidity()).toBe(true);
+    expect(cpfs.valid.checkValidity()).toBeTrue();
   });
 });
 
@@ -270,6 +270,7 @@ describe('"CPF.prototype[Symbol.iterator]" tests', () => {
     for (const test of tests) {
       let index = 0;
       for (const digit of cpfs[test]) {
+        // @ts-expect-error index is already checked.
         expect(digit).toBe(digits[test][index]);
         index += 1;
       }
@@ -291,7 +292,7 @@ describe('"CPF.Nil" tests', () => {
     expect(CPF.Nil.toArray()).toEqual([]);
   });
   it('should not be valid.', () => {
-    expect(CPF.Nil.checkValidity()).toBe(false);
+    expect(CPF.Nil.checkValidity()).toBeFalse();
   });
   it('should have an empty formatted string representation.', () => {
     expect(CPF.Nil.format()).toBe('');
@@ -300,31 +301,31 @@ describe('"CPF.Nil" tests', () => {
 
 describe('"CPF.from" tests', () => {
   it('should return a nil instance with empty strings.', () => {
-    expect(CPF.from('').equals(CPF.Nil)).toBe(true);
+    expect(CPF.from('').equals(CPF.Nil)).toBeTrue();
   });
   it('should return nil instance with strings with no decimal numbers.', () => {
-    expect(CPF.from('aaa').equals(CPF.Nil)).toBe(true);
-    expect(CPF.from('a long string').equals(CPF.Nil)).toBe(true);
-    expect(CPF.from('\u2014').equals(CPF.Nil)).toBe(true);
+    expect(CPF.from('aaa').equals(CPF.Nil)).toBeTrue();
+    expect(CPF.from('a long string').equals(CPF.Nil)).toBeTrue();
+    expect(CPF.from('\u2014').equals(CPF.Nil)).toBeTrue();
   });
   it('should return incomplete instance with strings with some decimal numbers.', () => {
-    expect(CPF.from('3167').equals(cpfs.semi)).toBe(true);
-    expect(CPF.from('3, 1, 6, 7').equals(cpfs.semi)).toBe(true);
-    expect(CPF.from('31 ab6\u2014 7').equals(cpfs.semi)).toBe(true);
+    expect(CPF.from('3167').equals(cpfs.semi)).toBeTrue();
+    expect(CPF.from('3, 1, 6, 7').equals(cpfs.semi)).toBeTrue();
+    expect(CPF.from('31 ab6\u2014 7').equals(cpfs.semi)).toBeTrue();
   });
   it('should return invalid instance with strings with at least 11 decimal numbers.', () => {
-    expect(CPF.from('31675745512').equals(cpfs.invalid)).toBe(true);
-    expect(CPF.from('3167574551200').equals(cpfs.invalid)).toBe(true);
-    expect(CPF.from('316.757.455-12').equals(cpfs.invalid)).toBe(true);
-    expect(CPF.from('316a757\u2014455z12').equals(cpfs.invalid)).toBe(true);
-    expect(CPF.from('316a757\u2014455z1200').equals(cpfs.invalid)).toBe(true);
+    expect(CPF.from('31675745512').equals(cpfs.invalid)).toBeTrue();
+    expect(CPF.from('3167574551200').equals(cpfs.invalid)).toBeTrue();
+    expect(CPF.from('316.757.455-12').equals(cpfs.invalid)).toBeTrue();
+    expect(CPF.from('316a757\u2014455z12').equals(cpfs.invalid)).toBeTrue();
+    expect(CPF.from('316a757\u2014455z1200').equals(cpfs.invalid)).toBeTrue();
   });
   it('should return valid instance with strings with at least 11 decimal numbers.', () => {
-    expect(CPF.from('31675745501').equals(cpfs.valid)).toBe(true);
-    expect(CPF.from('3167574550100').equals(cpfs.valid)).toBe(true);
-    expect(CPF.from('316.757.455-01').equals(cpfs.valid)).toBe(true);
-    expect(CPF.from('316a757\u2014455z01').equals(cpfs.valid)).toBe(true);
-    expect(CPF.from('316a757\u2014455z0100').equals(cpfs.valid)).toBe(true);
+    expect(CPF.from('31675745501').equals(cpfs.valid)).toBeTrue();
+    expect(CPF.from('3167574550100').equals(cpfs.valid)).toBeTrue();
+    expect(CPF.from('316.757.455-01').equals(cpfs.valid)).toBeTrue();
+    expect(CPF.from('316a757\u2014455z01').equals(cpfs.valid)).toBeTrue();
+    expect(CPF.from('316a757\u2014455z0100').equals(cpfs.valid)).toBeTrue();
   });
 });
 
@@ -332,7 +333,7 @@ describe('"CPF.create" tests', () => {
   it('should create valid CPFs', () => {
     for (let index = 0; index < 100; index++) {
       const cpf = CPF.create();
-      expect(cpf.checkValidity()).toBe(true);
+      expect(cpf.checkValidity()).toBeTrue();
     }
   });
 });
