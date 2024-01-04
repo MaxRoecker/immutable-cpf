@@ -1,5 +1,12 @@
 # immutable-cpf
 
+## 1.4.1
+
+### Patch Changes
+
+- 3546ec4: Add ignore-sync
+- d545dea: Update dependencies
+
 ## 1.4.0
 
 ### Minor Changes
